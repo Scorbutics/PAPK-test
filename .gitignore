@@ -20,3 +20,5 @@ jspm_packages/
 # Vite
 .vite/
 
+# Build output
+dist/
