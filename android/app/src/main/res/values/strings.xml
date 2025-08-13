@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">psdk-papk</string>
+    <string name="title_activity_main">psdk-papk</string>
+    <string name="package_name">com.pokemonworkshop.psdkpapk</string>
+    <string name="custom_url_scheme">com.pokemonworkshop.psdkpapk</string>
+</resources>
