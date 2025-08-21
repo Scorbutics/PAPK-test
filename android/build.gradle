@@ -1,38 +1,100 @@
-ext {
-    junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.2'
-    androidxAppCompatVersion = project.hasProperty('androidxAppCompatVersion') ? rootProject.ext.androidxAppCompatVersion : '1.7.0'
-    androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.2.1'
-    androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.6.1'
-}
-
 buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
+    ext.kotlin_version = '2.1.0'
+
     dependencies {
         classpath 'com.android.tools.build:gradle:8.7.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
+plugins {
+    id 'org.jetbrains.kotlin.android' version "$kotlin_version"
+    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
+}
 apply plugin: 'com.android.library'
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
+}
+
+ext {
+    junitVersion = project.hasProperty('junitVersion') ? rootProject.ext.junitVersion : '4.13.2'
+    androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.2.1'
+    androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.6.1'
+}
 
 android {
     namespace "com.scorbutics.rubyvm"
     compileSdk project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 35
+
+    sourceSets {
+        main {
+            assets.srcDirs += ['src/main/ruby']
+            jniLibs.srcDir('jniLibs')
+        }
+    }
+
+    packagingOptions.jniLibs.useLegacyPackaging true
+
     defaultConfig {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 23
         targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 35
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        externalNativeBuild {
+            cmake {
+                cFlags "-fdeclspec"
+                cppFlags "-std=c++17"
+                arguments "-DANDROID_STL=c++_shared","-DANDROID_PLATFORM=android-26","-DANDROID_ABI=arm64-v8a","-DCMAKE_BUILD_TYPE=Debug"
+            }
+        }
+        ndk {
+            //noinspection ChromeOsAbiSupport
+            abiFilters 'arm64-v8a'
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            
+            // TODO ???
+            signingConfig signingConfigs.debug
+
+            externalNativeBuild {
+                cmake {
+                    cFlags "-fdeclspec"
+                    cppFlags "-std=c++17"
+                    arguments "-DANDROID_STL=c++_shared","-DANDROID_PLATFORM=android-26","-DANDROID_ABI=arm64-v8a","-DCMAKE_BUILD_TYPE=Release"
+                }
+            }
+        }
+        debug {
+            ndk {
+                //noinspection ChromeOsAbiSupport
+                abiFilters 'arm64-v8a'
+                debugSymbolLevel 'FULL'
+            }
         }
     }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+
     lintOptions {
         abortOnError false
     }
@@ -40,19 +102,34 @@ android {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_21.toString()
+    }
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+    }
+    ndkVersion '25.0.8775105'
+    namespace 'com.scorbutics'
 }
-
-repositories {
-    google()
-    mavenCentral()
-}
-
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
-    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+
+    implementation(pluginLibs.apkzlib)
+    implementation(pluginLibs.apksig)
+    implementation(pluginLibs.zipalign)
+    implementation(pluginLibs.arsc)
+    implementation(pluginLibs.bcpkix.jdk15on)
+    implementation(pluginLibs.appcompat)
+    implementation(pluginLibs.material)
+    implementation(pluginLibs.constraintlayout)
+    implementation(pluginLibs.zip4j)
+    implementation(pluginLibs.legacy)
+    implementation(pluginLibs.kotlinx.serialization)
+    implementation(pluginLibs.kotlin.stdlib)
 }
