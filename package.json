@@ -80,19 +80,26 @@
     "rollup": "4.44.0"
   },
   "dependencies": {
+    "@capacitor-community/sqlite": "^7.0.1",
     "@capacitor/android": "^7.4.2",
     "@capacitor/app": "7.0.1",
     "@capacitor/core": "7.4.2",
+    "@capacitor/filesystem": "^7.1.4",
     "@capacitor/haptics": "7.0.1",
     "@capacitor/keyboard": "7.0.1",
+    "@capacitor/preferences": "^7.0.2",
     "@capacitor/status-bar": "7.0.1",
+    "@capawesome/capacitor-asset-manager": "^7.0.1",
     "@ionic/react": "^8.7.0",
+    "@zip.js/zip.js": "^2.7.72",
+    "capacitor-blob-writer": "^1.1.19",
     "history": "^5.3.0",
     "ionicons": "^7.4.0",
     "pokemon-studio-components": "github:Scorbutics/PokemonStudio#ionic-components",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router": "^6.26.6",
-    "react-router-dom": "^6.26.6"
+    "react-router-dom": "^6.26.6",
+    "ruby-vm": "file:plugins/ruby-vm"
   }
 }

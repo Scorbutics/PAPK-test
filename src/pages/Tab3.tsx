@@ -1,11 +1,22 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import './Tab3.css';
-import { Input, InputWithSeparatorContainer, Label } from 'pokemon-studio-components';
-
+import { DarkButton, Input, InputWithSeparatorContainer, Label } from 'pokemon-studio-components';
+import { RubyVM } from '@root/plugins/ruby-vm/dist/esm';
 
 const Tab3: React.FC = () => {
-  console.log('Tab3 loaded');
+
+  const callPlugin = async () => {
+    const { interpreter } = await RubyVM.create({
+      executionLocation: "",
+      archiveLocation: ""
+    });
+    const result = await RubyVM.execute({
+       interpreter
+    })
+    console.log("finished");
+    return result;
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -24,6 +35,7 @@ const Tab3: React.FC = () => {
         <Label>Coucou</Label>
         <Input name="projectPath" />
       </InputWithSeparatorContainer>
+      <DarkButton onClick={callPlugin}>Click</DarkButton>
       
       </IonContent>
     </IonPage>
