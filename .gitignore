@@ -49,9 +49,7 @@ captures
 #*.jks
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
-
 android/.cxx
-
 android/src/main/assets/ruby-stdlib.zip
 android/src/main/cpp/CMakeLists.txt
 android/src/main/cpp/external
@@ -60,3 +58,4 @@ android/src/main/cpp/main.cpp
 android/src/main/cpp/psdk-script-starter
 android/src/main/cpp/ruby-vm
 android/src/main/ruby
+android/src/main/cpp/assets

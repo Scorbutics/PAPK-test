@@ -74,7 +74,7 @@ const mappings = Object.values(config.targets)
                 const relativeTarget = path.join(config.sharedFolder, folder);
                 switch (linkType) {
                 case 'content':
-                    const files = fs.readdirSync(relativeTarget); 
+                    const files = fs.existsSync(relativeTarget) ? fs.readdirSync(relativeTarget) : []; 
                     return files.map(file => ({
                         target: path.join(relativeTarget, file),
                         linkPath: path.join(relativePath, file),

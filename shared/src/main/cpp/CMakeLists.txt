@@ -6,6 +6,7 @@ set(IMPORT_DIR ${CMAKE_SOURCE_DIR}/external)
 set(JNILIBS_DIR ${CMAKE_SOURCE_DIR}/../jniLibs)
 set(LOGGING_DIR ${CMAKE_SOURCE_DIR}/logging)
 set(RUBY_VM_DIR ${CMAKE_SOURCE_DIR}/ruby-vm)
+set(ASSETS_DIR ${CMAKE_SOURCE_DIR}/assets)
 set(JNI_DIR ${CMAKE_SOURCE_DIR}/jni)
 
 find_library(log-lib log)
@@ -22,6 +23,7 @@ FOREACH(lib_shared ${libs_shared_dependencies})
 ENDFOREACH()
 
 add_subdirectory(logging)
+add_subdirectory(assets)
 add_subdirectory(ruby-vm)
 add_subdirectory(jni)
 

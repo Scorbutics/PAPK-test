@@ -11,6 +11,7 @@
 #include "logging.h"
 #include "exec-main-vm.h"
 #include "ruby-vm.h"
+#include "install.h"
 
 #include "ruby/config.h"
 #include "ruby/version.h"
@@ -104,6 +105,13 @@ int ExecMainRubyVM(const char* scriptContent, int logsFd, int commandsFd,
     setenv(ENV_RUBY_VM_COMMAND_SOCKET, commandSocketFdStr, 1);
 
     fprintf(stderr, "Env set!\n");
+
+    if (install_embedded_files(rubyDirectoryPath) != 0) {
+        fprintf(stderr, "Error while installing ruby standard files\n");
+        return -1;
+    } else {
+        fprintf(stdout, "Installation of ruby standard library success!\n");
+    }
 
     const int rubyReturn = ExecRubyVM(rubyDirectoryPath, nativeLibsDirLocation, scriptContent, 0);
 
